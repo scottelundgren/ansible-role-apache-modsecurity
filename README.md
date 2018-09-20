@@ -8,27 +8,47 @@ None.
 
 ## Role Variables
 
-Available variables are listed below, along with default values (see `defaults/main.yml`):
+Most common variables are listed below, the (mostly) immutable ones are in `defaults/main.yml` and the recommended settings are in `var/main.yml`, this last file would be the one to edit.
 
-Set the Apache config folder.
+The apache config folder for each distribution by `default/main.yml`:
 
-    apache_conf_dir: "/etc/apache2/conf-available"
+    apache_conf_dir_debian: "/etc/apache2/conf-available"
+    apache_conf_dir_redhat: "/etc/httpd/conf.d"
 
-Set the location of the log file.
+The settings in `var/main.yml`:
 
-    sec_audit_log: "/var/log/apache/apache_modsecurity_audit.log"
+Enable mod_security in detection only mode, you should change this to On once you are sure everything is working as intended:
 
-Configure which parts of the HTTP request and response will be logged.
+    SecRuleEngine: DetectionOnly
 
-    sec_audit_log_parts: "ABIFHZ" # # ABCDEFGHIJKZ
+Request rules:
 
-Set the HTTP "X-Powered-By" header value.
+    SecRequestBodyAccess: On
+    SecRequestBodyLimit: 13107200
+    SecRequestBodyNoFilesLimit: 131072
+    SecRequestBodyInMemoryLimit: 131072
+    SecRequestBodyLimitAction: Reject
+    SecResponseBodyAccess: On
+    SecResponseBodyMimeType: "text/plain text/html text/xml"
+    SecResponseBodyLimit: 524288
+    SecResponseBodyLimitAction: ProcessPartial
 
-    sec_server_signature: "Apache 7000"
+Temporary and permanent data stores:
 
-Set which rules to not log.
+    SecTmpDir: /tmp/
+    SecDataDir: /tmp/
 
-    sec_rule_remove_by_id: "960017,970901,960015"
+Log settins:
+
+    SecAuditEngine: RelevantOnly
+    SecAuditLogParts: ABIJDEFHZ
+    SecAuditLogType: Serial
+    SecAuditLog: /var/log/modsec_audit.log
+
+Share status with mod_security developers:
+
+    SecStatusEngine: On
+
 
 ## Dependencies
 
