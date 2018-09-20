@@ -9,16 +9,14 @@
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
 - name: Install the Apache mod_security2 module for Red Hat or CentOS
-  apt: name="{{ item }}"
+  yum: name="{{ item }}" update_cache=yes state=latest
   with_items:
     - mod_security
     - mod_security_crs
-    update_cache: yes
-    state: latest
   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
 
 # http://docs.ansible.com/ansible/latest/apache2_module_module.html
-- name: enable mod_security2
+- name: enable mod_security2 in Debian and Ubuntu
   apache2_module:
     name: security2
     state: present
@@ -28,7 +26,7 @@
 
 
 # http://docs.ansible.com/ansible/latest/template_module.html
-- name: Deploy modsecurity.conf file in Debian
+- name: Deploy modsecurity.conf file in Debian and Ubuntu
   template:
     src: "modsecurity.conf.j2"
     dest: "{{ apache_conf_dir_debian }}/modsecurity.conf"
@@ -60,4 +58,4 @@
   stat: path=/etc/httpd/conf.modules.d/10-mod_security.conf register=rhmodule
   notify:
   - restart apache2
-  when: rhmodule.stat.exists and ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  when: rhmodule.stat.exists and ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
