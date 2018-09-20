@@ -1,0 +1,14 @@
+---
+- name: restart apache2
+  service:
+    name: apache2
+    state: restarted
+    sleep: 5
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: restart apache2
+  service:
+    name: httpd
+    state: restarted
+    sleep: 5
+  when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'

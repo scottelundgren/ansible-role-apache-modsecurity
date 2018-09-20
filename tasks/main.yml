@@ -1,0 +1,63 @@
+---
+
+# http://docs.ansible.com/ansible/latest/apt_module.html
+- name: Install the Apache mod_security2 module for Debian or Ubuntu
+  apt:
+    name: libapache2-mod-security2
+    update_cache: yes
+    state: latest
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Install the Apache mod_security2 module for Red Hat or CentOS
+  apt: name="{{ item }}"
+  with_items:
+    - mod_security
+    - mod_security_crs
+    update_cache: yes
+    state: latest
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+# http://docs.ansible.com/ansible/latest/apache2_module_module.html
+- name: enable mod_security2
+  apache2_module:
+    name: security2
+    state: present
+  notify:
+   - restart apache2
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+
+# http://docs.ansible.com/ansible/latest/template_module.html
+- name: Deploy modsecurity.conf file in Debian
+  template:
+    src: "modsecurity.conf.j2"
+    dest: "{{ apache_conf_dir_debian }}/modsecurity.conf"
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+# http://docs.ansible.com/ansible/latest/template_module.html
+- name: Deploy modsecurity.conf file in Red Hat
+  template:
+    src: "modsecurity.conf-recommended.j2"
+    dest: "{{ apache_conf_dir_redhat }}/modsecurity.conf"
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+
+# a2enconf modsecurity.conf
+- name: enable mod_security2 config file
+  command: "a2enconf modsecurity.conf"
+  notify:
+  - restart apache2
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+# a2enconf modsecurity.conf
+- name: enable mod_security2 config file in Red Hat
+  stat: path=/etc/httpd/conf.modules.d/10-mod_security.conf register=rhmodule
+  notify:
+  - restart apache2
+  when: rhmodule.stat.exists and ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'

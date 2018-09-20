@@ -1,0 +1,25 @@
+---
+dependencies: []
+
+galaxy_info:
+  author: leogallego
+  description: Install and configure Apache mod_security2 module
+  company: "Leonardo Gallego"
+  license: "license (GPLv3)"
+  min_ansible_version: 2.2
+  platforms:
+    - name: Ubuntu
+      versions:
+      - all
+    - name: Debian
+      versions:
+      - all
+    - name: EL
+      versions:
+      - all
+  galaxy_tags:
+    - apache
+    - web
+    - module
+    - security
+    - apache24
