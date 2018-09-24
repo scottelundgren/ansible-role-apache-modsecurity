@@ -8,7 +8,7 @@ None.
 
 ## Role Variables
 
-Most common variables are listed below, the (mostly) immutable ones are in `defaults/main.yml` and the recommended settings are in `var/main.yml`, this last file would be the one to edit.
+Most common variables are listed below, the (mostly) immutable ones are in `defaults/main.yml` and the recommended settings are in `var/main.yml`, this last file would be the one to edit. There are also a couple of templates for the `modsecurity.conf` file, a minimal one and a recommended by mod_security itself.
 
 The apache config folder for each distribution by `default/main.yml`:
 

@@ -13,7 +13,7 @@
   with_items:
     - mod_security
     - mod_security_crs
-  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat'
 
 # http://docs.ansible.com/ansible/latest/apache2_module_module.html
 - name: enable mod_security2 in Debian and Ubuntu
@@ -28,34 +28,40 @@
 # http://docs.ansible.com/ansible/latest/template_module.html
 - name: Deploy modsecurity.conf file in Debian and Ubuntu
   template:
-    src: "modsecurity.conf.j2"
-    dest: "{{ apache_conf_dir_debian }}/modsecurity.conf"
+    src: "modsecurity.conf-recommended.j2"
+    dest: "{{ apache_conf_dir_debian }}/mod_security.conf"
     owner: root
     group: root
     mode: 0644
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
 # http://docs.ansible.com/ansible/latest/template_module.html
-- name: Deploy modsecurity.conf file in Red Hat
-  template:
-    src: "modsecurity.conf-recommended.j2"
-    dest: "{{ apache_conf_dir_redhat }}/modsecurity.conf"
-    owner: root
-    group: root
-    mode: 0644
-  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+# - name: Deploy modsecurity.conf file in Red Hat
+#   template:
+#     src: "modsecurity.conf-recommended.j2"
+#     dest: "{{ apache_conf_dir_redhat }}/mod_security.conf"
+#     owner: root
+#     group: root
+#     mode: 0644
+#   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat'
 
 
 # a2enconf modsecurity.conf
-- name: enable mod_security2 config file
+- name: enable mod_security2 config file in Debian and Ubuntu
   command: "a2enconf modsecurity.conf"
   notify:
   - restart apache2
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
-# a2enconf modsecurity.conf
+# check if module mod_security.conf is enabled in red hat
 - name: enable mod_security2 config file in Red Hat
-  stat: path=/etc/httpd/conf.modules.d/10-mod_security.conf register=rhmodule
-  notify:
-  - restart apache2
-  when: rhmodule.stat.exists and ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+  stat:
+    path: /etc/httpd/conf.modules.d/10-mod_security.conf
+  register: modsec
+
+
+- name: restart apache in Red Hat if mod_security.conf is enabled just in case
+  service:
+    name: httpd
+    state: restarted
+  when: modsec.stat.exists is defined and modsec.stat.exists and (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat')

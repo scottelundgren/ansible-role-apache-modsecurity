@@ -1,3 +1,5 @@
+<IfModule mod_security2.c>
+
 # -- Rule engine initialization ----------------------------------------------
 
 # Enable ModSecurity, attaching it to every transaction. Use detection
@@ -223,3 +225,6 @@ SecUnicodeMapFile unicode.mapping 20127
 # Web Server version, APR version, PCRE version, Lua version, Libxml2
 # version, Anonymous unique id for host.
 SecStatusEngine On
+
+
+</IfModule>
