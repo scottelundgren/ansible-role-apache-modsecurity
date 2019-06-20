@@ -49,8 +49,8 @@
     ansible_distribution == 'RedHat' or ansible_distribution == 'Amazon'
 
 - name: Deploy unicode.mapping file that is required but missing in Amazon Linux
-  file:
-    src: "unicode.mapping"
+  copy:
+    src: "files/unicode.mapping"
     dest: "{{ apache_conf_dir_redhat }}unicode.mapping"
     owner: root
     group: root
