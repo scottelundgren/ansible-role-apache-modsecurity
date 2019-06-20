@@ -13,7 +13,7 @@
   with_items:
     - mod_security
     - mod_security_crs
-  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat'
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat' or ansible_distribution == 'Amazon'
 
 # http://docs.ansible.com/ansible/latest/apache2_module_module.html
 - name: enable mod_security2 in Debian and Ubuntu
@@ -36,14 +36,14 @@
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
 # http://docs.ansible.com/ansible/latest/template_module.html
-# - name: Deploy modsecurity.conf file in Red Hat
-#   template:
-#     src: "modsecurity.conf-recommended.j2"
-#     dest: "{{ apache_conf_dir_redhat }}/mod_security.conf"
-#     owner: root
-#     group: root
-#     mode: 0644
-#   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat'
+ - name: Deploy modsecurity.conf file in Red Hat
+   template:
+     src: "modsecurity.conf-recommended.j2"
+     dest: "{{ apache_conf_dir_redhat }}/mod_security.conf"
+     owner: root
+     group: root
+     mode: 0644
+   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat' or ansible_distribution == 'Amazon' 
 
 
 # a2enconf modsecurity.conf
@@ -64,4 +64,4 @@
   service:
     name: httpd
     state: restarted
-  when: modsec.stat.exists is defined and modsec.stat.exists and (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat')
+  when: modsec.stat.exists is defined and modsec.stat.exists and (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat' or ansible_distribution == 'Amazon' )

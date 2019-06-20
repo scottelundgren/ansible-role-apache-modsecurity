@@ -11,4 +11,4 @@
     name: httpd
     state: restarted
     sleep: 5
-  when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
+  when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS' or ansible_distribution == 'Amazon'

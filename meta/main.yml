@@ -18,6 +18,9 @@ galaxy_info:
     - name: EL
       versions:
       - 7
+    - name: Amazon
+      versions:
+      - 2
   galaxy_tags:
     - apache
     - web
