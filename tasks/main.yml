@@ -36,14 +36,14 @@
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
 # http://docs.ansible.com/ansible/latest/template_module.html
- - name: Deploy modsecurity.conf file in Red Hat
-   template:
-     src: "modsecurity.conf-recommended.j2"
-     dest: "{{ apache_conf_dir_redhat }}/mod_security.conf"
-     owner: root
-     group: root
-     mode: 0644
-   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat' or ansible_distribution == 'Amazon' 
+- name: Deploy modsecurity.conf file in Red Hat
+  template:
+    src: "modsecurity.conf-recommended.j2"
+    dest: "{{ apache_conf_dir_redhat }}/mod_security.conf"
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat' or ansible_distribution == 'Amazon' 
 
 
 # a2enconf modsecurity.conf
