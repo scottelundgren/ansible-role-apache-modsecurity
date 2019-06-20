@@ -13,8 +13,9 @@
   with_items:
     - mod_security
     - mod_security_crs
-  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or
-  ansible_distribution == 'RedHat' or ansible_distribution == 'Amazon'
+  when: |
+    ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+    or ansible_distribution == 'RedHat' or ansible_distribution == 'Amazon'
 
 - name: Install the unicode.mapping file that is required but missing in Amazon Linux
   file:
@@ -52,8 +53,9 @@
     owner: root
     group: root
     mode: 0644
-  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or
-   ansible_distribution == 'RedHat' or ansible_distribution == 'Amazon'
+  when: |
+    ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or
+    ansible_distribution == 'RedHat' or ansible_distribution == 'Amazon'
 
 # a2enconf modsecurity.conf
 - name: enable mod_security2 config file in Debian and Ubuntu
@@ -72,6 +74,7 @@
   service:
     name: httpd
     state: restarted
-  when: modsec.stat.exists is defined and modsec.stat.exists and
-  (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or
-  ansible_distribution == 'RedHat' or ansible_distribution == 'Amazon' )
+  when: |
+    modsec.stat.exists is defined and modsec.stat.exists and
+    (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+    or ansible_distribution == 'RedHat' or ansible_distribution == 'Amazon' )
