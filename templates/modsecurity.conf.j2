@@ -6,7 +6,7 @@
     SecAuditEngine On
     SecAuditLog "{{ sec_audit_log }}"
     SecAuditLogParts "{{ sec_audit_log_parts }}"
-    SecRequestBodyAccess on
+    SecRequestBodyAccess On
     
     SecDefaultAction "nolog,noauditlog,allow,phase:2"
 
